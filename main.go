@@ -4,7 +4,6 @@ import (
 	"gopkg.in/gin-gonic/gin.v1"
 	api "power/service"
 	"github.com/dgrijalva/jwt-go"
-
 )
 
 func respondWithError(code int, message string,c *gin.Context) {
@@ -16,6 +15,12 @@ func respondWithError(code int, message string,c *gin.Context) {
 
 func TokenAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, auth")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+
 		jwt_string:= c.Request.Header.Get("auth")
 
 		token, err := jwt.Parse(jwt_string, func(token *jwt.Token) (interface{}, error) {
